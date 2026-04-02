@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tribunal</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Tribunal</h1>
+    <p style="font-style: italic;">A Virtual Debate Judge</p>
+
+    <form action="/analyze" method="post">
+        <label>Party A Argument:</label><br>
+        <textarea id="partyA" name="party_a" rows="5" cols="50" required></textarea>
+        <button type="button" onclick="recordSpeech('partyA')">🎤 Speak</button><br><br>
+
+        <label>Party B Argument:</label><br>
+        <textarea id="partyB" name="party_b" rows="5" cols="50" required></textarea>
+        <button type="button" onclick="recordSpeech('partyB')">🎤 Speak</button><br><br>
+
+        <button type="submit">Judge</button>
+    </form>
+
+    {% if result %}
+        <h2>Result: {{ result }}</h2>
+    {% endif %}
+
+    {% if analysis %}
+        <h3>🧠 Analysis:</h3>
+        <p>Party A used {{ analysis.count_a }} words and {{ analysis.strong_a }} strong words.</p>
+        <p>Party B used {{ analysis.count_b }} words and {{ analysis.strong_b }} strong words.</p>
+        <p>Total Score → Party A: {{ analysis.score_a }}, Party B: {{ analysis.score_b }}</p>
+    {% endif %}
+
+    <script>
+    function recordSpeech(textareaId) {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.start();
+
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById(textareaId).value += ' ' + transcript;
+        };
+
+        recognition.onerror = function(event) {
+            alert('Speech recognition error: ' + event.error);
+        };
+    }
+    </script>
+</body>
+</html>
