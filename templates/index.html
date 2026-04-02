@@ -5,50 +5,41 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Tribunal</h1>
-    <p style="font-style: italic;">A Virtual Debate Judge</p>
 
-    <form action="/analyze" method="post">
-        <label>Party A Argument:</label><br>
-        <textarea id="partyA" name="party_a" rows="5" cols="50" required></textarea>
-        <button type="button" onclick="recordSpeech('partyA')">🎤 Speak</button><br><br>
+<div class="navbar">
+    ⚖️ Tribunal
+</div>
 
-        <label>Party B Argument:</label><br>
-        <textarea id="partyB" name="party_b" rows="5" cols="50" required></textarea>
-        <button type="button" onclick="recordSpeech('partyB')">🎤 Speak</button><br><br>
+<div class="container">
+    
+    <h1>AI Debate Judge</h1>
+    <p class="subtitle">Where logic meets intelligence</p>
 
-        <button type="submit">Judge</button>
+    <form action="/analyze" method="POST">
+        
+        <div class="grid">
+            <div class="card">
+                <h2>🟢 Party A</h2>
+                <textarea name="argument1" placeholder="Enter argument..."></textarea>
+            </div>
+
+            <div class="card">
+                <h2>🔴 Party B</h2>
+                <textarea name="argument2" placeholder="Enter argument..."></textarea>
+            </div>
+        </div>
+
+        <button type="submit">⚡ Analyze Debate</button>
     </form>
 
     {% if result %}
-        <h2>Result: {{ result }}</h2>
+    <div class="result-card">
+        <h2>🏆 Result</h2>
+        <p>{{ result }}</p>
+    </div>
     {% endif %}
 
-    {% if analysis %}
-        <h3>🧠 Analysis:</h3>
-        <p>Party A used {{ analysis.count_a }} words and {{ analysis.strong_a }} strong words.</p>
-        <p>Party B used {{ analysis.count_b }} words and {{ analysis.strong_b }} strong words.</p>
-        <p>Total Score → Party A: {{ analysis.score_a }}, Party B: {{ analysis.score_b }}</p>
-    {% endif %}
+</div>
 
-    <script>
-    function recordSpeech(textareaId) {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'en-US';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-
-        recognition.start();
-
-        recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            document.getElementById(textareaId).value += ' ' + transcript;
-        };
-
-        recognition.onerror = function(event) {
-            alert('Speech recognition error: ' + event.error);
-        };
-    }
-    </script>
 </body>
 </html>
