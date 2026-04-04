@@ -6,18 +6,21 @@
 </head>
 <body>
 
+<!-- NAVBAR -->
 <div class="navbar">
     ⚖️ Tribunal
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
     <h1>AI Debate Judge</h1>
-    <p class="subtitle">Where logic meets intelligence</p>
+    <p class="subtitle">Decide with logic. Dominate with clarity.</p>
 
-    <!-- SETUP -->
+    <!-- FORM -->
     <form action="/analyze" method="POST">
 
+        <!-- SETUP -->
         <div class="setup">
             <input type="text" name="topic" placeholder="Enter Debate Topic (Agenda)">
             <input type="text" name="teamA" placeholder="Team FOR name">
@@ -43,17 +46,34 @@
 
     </form>
 
-    <!-- RESULT -->
+    <!-- RESULT SECTION -->
     {% if result %}
     <div class="result">
+
         <h2>🏆 Winner: {{ result }}</h2>
 
         <p><strong>Topic:</strong> {{ topic }}</p>
 
-        <div class="scores">
-            <p>{{ teamA }} Score: {{ scoreA }}</p>
-            <p>{{ teamB }} Score: {{ scoreB }}</p>
+        {% if explanation %}
+        <p style="margin-top:10px; color:#ccc;">
+            🤖 {{ explanation }}
+        </p>
+        {% endif %}
+
+        <!-- SCORE SLIDERS -->
+        <div style="margin-top:20px;">
+            <h3>📊 Judge Evaluation</h3>
+
+            <label>Logic & Evidence</label>
+            <input type="range" class="slider" min="0" max="10">
+
+            <label>Rhetoric & Delivery</label>
+            <input type="range" class="slider" min="0" max="10">
+
+            <label>Clash (Rebuttal Strength)</label>
+            <input type="range" class="slider" min="0" max="10">
         </div>
+
     </div>
     {% endif %}
 
