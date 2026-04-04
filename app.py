@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import os
 
 app = Flask(__name__)
 
@@ -6,42 +7,36 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    party_a = request.form['party_a']
-    party_b = request.form['party_b']
+    topic = request.form.get('topic', '')
+    teamA = request.form.get('teamA', 'Team A')
+    teamB = request.form.get('teamB', 'Team B')
+    arg1 = request.form.get('argument1', '')
+    arg2 = request.form.get('argument2', '')
 
-    words_a = party_a.split()
-    words_b = party_b.split()
-    count_a = len(words_a)
-    count_b = len(words_b)
+    # Simple scoring logic (we upgrade later)
+    scoreA = len(arg1.split())
+    scoreB = len(arg2.split())
 
-    strong_words = ["must", "definitely", "clearly", "strong", "important", "critical", "believe", "undeniable"]
-    strong_a = sum(word.lower() in strong_words for word in words_a)
-    strong_b = sum(word.lower() in strong_words for word in words_b)
-
-    score_a = count_a + (2 * strong_a)
-    score_b = count_b + (2 * strong_b)
-
-    if score_a > score_b:
-        winner = "Party A"
-    elif score_b > score_a:
-        winner = "Party B"
+    if scoreA > scoreB:
+        winner = teamA + " (FOR)"
+    elif scoreB > scoreA:
+        winner = teamB + " (AGAINST)"
     else:
-        winner = "It's a Tie!"
+        winner = "It's a Tie"
 
-    analysis = {
-        "count_a": count_a,
-        "count_b": count_b,
-        "strong_a": strong_a,
-        "strong_b": strong_b,
-        "score_a": score_a,
-        "score_b": score_b
-    }
+    return render_template(
+        'index.html',
+        result=winner,
+        topic=topic,
+        teamA=teamA,
+        teamB=teamB,
+        scoreA=scoreA,
+        scoreB=scoreB
+    )
 
-    return render_template('index.html', result=winner, analysis=analysis, party_a=party_a, party_b=party_b)
-
-import os
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))

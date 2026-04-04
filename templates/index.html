@@ -15,17 +15,25 @@
     <h1>AI Debate Judge</h1>
     <p class="subtitle">Where logic meets intelligence</p>
 
+    <!-- SETUP -->
     <form action="/analyze" method="POST">
 
+        <div class="setup">
+            <input type="text" name="topic" placeholder="Enter Debate Topic (Agenda)">
+            <input type="text" name="teamA" placeholder="Team FOR name">
+            <input type="text" name="teamB" placeholder="Team AGAINST name">
+        </div>
+
+        <!-- ARGUMENTS -->
         <div class="cards">
 
             <div class="card green">
-                <h2>🟢 Party A</h2>
+                <h2>🟢 Party A (FOR)</h2>
                 <textarea name="argument1" placeholder="Enter argument..."></textarea>
             </div>
 
             <div class="card red">
-                <h2>🔴 Party B</h2>
+                <h2>🔴 Party B (AGAINST)</h2>
                 <textarea name="argument2" placeholder="Enter argument..."></textarea>
             </div>
 
@@ -35,10 +43,17 @@
 
     </form>
 
+    <!-- RESULT -->
     {% if result %}
     <div class="result">
-        <h2>🏆 Winner</h2>
-        <p>{{ result }}</p>
+        <h2>🏆 Winner: {{ result }}</h2>
+
+        <p><strong>Topic:</strong> {{ topic }}</p>
+
+        <div class="scores">
+            <p>{{ teamA }} Score: {{ scoreA }}</p>
+            <p>{{ teamB }} Score: {{ scoreB }}</p>
+        </div>
     </div>
     {% endif %}
 
